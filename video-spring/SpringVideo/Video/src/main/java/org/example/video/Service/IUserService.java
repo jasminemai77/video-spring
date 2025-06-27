@@ -1,7 +1,7 @@
 package org.example.video.Service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.example.video.Pojo.User;
+import org.example.video.entity.User;
 
 
 public interface IUserService extends IService<User> {

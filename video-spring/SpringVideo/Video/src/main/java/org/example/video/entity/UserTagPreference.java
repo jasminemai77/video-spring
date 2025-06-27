@@ -1,4 +1,4 @@
-package org.example.video.Pojo;
+package org.example.video.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.*;
@@ -13,9 +13,12 @@ import java.io.Serializable;
 @TableName("user_tag_preference")
 public class UserTagPreference implements Serializable {
 
+    @TableId(value = "user_id")
     private Long userId;
 
+    @TableField("tag_id")
     private Long tagId;
 
+    @TableField("weight")
     private Float weight;
 }

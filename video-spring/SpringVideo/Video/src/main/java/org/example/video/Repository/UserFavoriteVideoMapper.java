@@ -3,7 +3,7 @@ package org.example.video.Repository;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.example.video.Pojo.UserFavoriteVideo;
+import org.example.video.entity.UserFavoriteVideo;
 import org.springframework.stereotype.Repository;
 
 @Mapper

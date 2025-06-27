@@ -1,4 +1,4 @@
-package org.example.video.Pojo;
+package org.example.video.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.*;
@@ -10,17 +10,21 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@TableName("comment")
-public class Comment implements Serializable {
+@TableName("tag")
+public class Tag implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private Long videoId;
+    @TableField("name")
+    private String name;
 
-    private Long userId;
+    @TableField("description")
+    private String description;
 
-    private String content;
+    @TableField("created_by")
+    private Long createdBy;
 
+    @TableField("created_at")
     private String createdAt;
 }
