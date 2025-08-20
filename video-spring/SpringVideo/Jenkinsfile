@@ -1,29 +1,39 @@
-version: "3.9"
-
-services:
-  app:
-    build: .
-    container_name: my-springboot-app
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_PROFILES_ACTIVE: prod
-    depends_on:
-      - db
-
-  db:
-    image: mysql:8.0
-    container_name: my-mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root123
-      MYSQL_DATABASE: shopdb
-      MYSQL_USER: shopuser
-      MYSQL_PASSWORD: shop123
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-
-volumes:
-  mysql_data:
+pipeline {
+    agent any
+    environment {
+        REGISTRY = "harbor.mycompany.com"
+        BACKEND_IMAGE = "video-spring-backend"
+        VERSION = "0.0.1"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'develop', url: 'https://github.com/jasminemai77/video-spring.git'
+            }
+        }
+        stage('Build Backend') {
+            steps {
+                dir('video-spring') { // 进入子目录
+                    sh 'mvn clean package -DskipTests'
+                    sh "docker build -t ${REGISTRY}/${BACKEND_IMAGE}:${VERSION} ."
+                    sh "docker push ${REGISTRY}/${BACKEND_IMAGE}:${VERSION}"
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh """
+                ssh deploy@server 'cd /opt/video-spring && \
+                docker-compose down && \
+                docker-compose pull && \
+                docker-compose up -d'
+                """
+            }
+        }
+        stage('Notify') {
+            steps {
+                echo "部署完成"
+            }
+        }
+    }
+}
